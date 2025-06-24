@@ -3,22 +3,40 @@
 
 # Load settings
 if [ -f $(dirname "$0")/../data/settings.conf ]; then
-    source $(dirname "$0")/../data/settings.conf
+    source data/settings.conf
 else
     echo "Error: data/settings.conf not found."
     exit 1
 fi
 
-# Function to show progress bar
+# Function to generate progress bar
 progress_bar() {
     local current=$1
     local total=$2
     local bars=10
+    # Prevent division by zero
+    if [ "$total" -eq 0 ]; then
+        total=1
+    fi
+    # Cap current at total to avoid overflow
     local filled=$((current * bars / total))
+    if [ $filled -gt $bars ]; then
+        filled=$bars
+    fi
     local empty=$((bars - filled))
+    # Ensure empty is non-negative
+    if [ $empty -lt 0 ]; then
+        empty=0
+    fi
     printf "["
-    printf "#%.0s" $(seq 1 $filled)
-    printf "-%.0s" $(seq 1 $empty)
+    # Print filled portion
+    if [ $filled -gt 0 ]; then
+        printf "#%.0s" $(seq 1 $filled)
+    fi
+    # Print empty portion
+    if [ $empty -gt 0 ]; then
+        printf -- "-%.0s" $(seq 1 $empty)
+    fi
     printf "] %s/%s\n" "$current" "$total"
 }
 
