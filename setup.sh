@@ -31,7 +31,7 @@ chmod u+rw data/*.txt data/settings.conf
 # Verify setup
 if [ -f data/settings.conf ] && [ -f data/messages.txt ] && [ -f data/water_log.txt ] && [ -f data/reminder.log ]; then
     echo "Setup completed successfully!"
-    echo "Run './scripts/water.sh' to start."
+    echo "Run './scripts/waterbuddy.sh' to start."
 else
     echo "Error: Setup failed. Check data/ directory contents."
     exit 1
